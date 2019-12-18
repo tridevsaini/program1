@@ -45,10 +45,9 @@ public class DatabaseConnection {
 
 			stmt.executeUpdate(sql);
 			System.out.println("Created table in given database...");
-
 //which is used to read the file
 			Scanner scanner = new Scanner(new File("/home/ytp-ind-003/Desktop/sai/empdetails"));
-			ArrayList<EmployeeDetails> employees = new ArrayList<EmployeeDetails>();
+			ArrayList<Employee> employees = new ArrayList<Employee>();
 
 			while (scanner.hasNextLine()) {
 				String lineOfText = scanner.nextLine();
@@ -58,7 +57,7 @@ public class DatabaseConnection {
 				Scanner scannerLine = new Scanner(lineOfText.replaceAll(" ", "")).useDelimiter("\\|");
 				System.out.println(lineOfText);
 				while (scannerLine.hasNext()) {
-					EmployeeDetails employee = new EmployeeDetails(scannerLine.nextInt(), scannerLine.next(), scannerLine.nextInt(),
+					Employee employee = new Employee(scannerLine.nextInt(), scannerLine.next(), scannerLine.nextInt(),
 							scannerLine.next().charAt(0), scannerLine.next(), scannerLine.nextDouble(),
 							scannerLine.next());
 					employees.add(employee);
@@ -69,7 +68,7 @@ public class DatabaseConnection {
 			System.out.println("before updating salary:" + employees);
 
 			for (Iterator iterator = employees.iterator(); iterator.hasNext();) {
-				EmployeeData employee = (EmployeeData) iterator.next();
+				Employee employee = (Employee) iterator.next();
 				if (employee.getEMP_DEPARTMENT().equals("IT")) {
 					double newsalary = employee.getEMP_SALARY() * 60 / 100;
 					newsalary = newsalary + employee.getEMP_SALARY();
@@ -87,7 +86,6 @@ public class DatabaseConnection {
 					employee.setEMP_SALARY(employee.getEMP_SALARY() * 1.5);
 				}
 				insertEmployee(employee);
-
 			}
 
 			System.out.println("after updating salary:" + employees);
@@ -111,15 +109,15 @@ public class DatabaseConnection {
 		}
 	}
 
-	public static void insertEmployee(EmployeeData emp) {
+	public static void insertEmployee(Employee emp) {
 
 		PreparedStatement ps;
 		try {
 			ps = connection.prepareStatement(
 					"insert into EMPLOYEE(EMP_ID ,EMP_NAME,EMP_AGE,EMP_GENDER, EMP_EMAIL,EMP_SALARY ,EMP_DEPARTMENT ) "
-							+ "values(" + emp.getEMP_ID() + ",'" + emp.getEMP_NAME() + "'," + emp.getEMP_GENDER()
-							+ "','" + emp.getEMP_AGE() + "','" + emp.getEMP_SALARY() + "','" + emp.getEMP_DEPARTMENT()
-							+ "')");
+							+ "values(" + emp.getEMP_ID() + ",'" + emp.getEMP_NAME() + "'," + emp.getEMP_AGE() + ",'"
+							+ emp.getEMP_GENDER() + "','" + emp.getEMP_AGE() + "','" + emp.getEMP_SALARY() + "','"
+							+ emp.getEMP_DEPARTMENT() + "')");
 			int status = ps.executeUpdate();
 			if (status != 0) {
 				System.out.println("inserted updated database ");
@@ -129,4 +127,5 @@ public class DatabaseConnection {
 		}
 
 	}
+
 }
